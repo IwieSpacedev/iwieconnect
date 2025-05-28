@@ -1,0 +1,129 @@
+.map-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.map-modal-content {
+  background-color: var(--white);
+  border-radius: var(--border-radius-lg);
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  animation: slideIn 0.3s ease-out;
+}
+
+.map-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--dark-secondary);
+  z-index: 10;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.map-modal-close:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: var(--dark-color);
+}
+
+.map-modal-header {
+  padding: 1.5rem 1.5rem 0.5rem;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.map-modal-header h3 {
+  margin: 0;
+  color: var(--dark-color);
+  font-size: 1.5rem;
+}
+
+.map-modal-body {
+  padding: 1rem 1.5rem;
+}
+
+.map-modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.map-modal-button {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.map-modal-button:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .map-modal-content {
+    width: 95%;
+  }
+  
+  .map-modal-header h3 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .map-modal-content {
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+  
+  .map-modal-header {
+    padding: 1rem 1rem 0.5rem;
+  }
+  
+  .map-modal-body {
+    padding: 0.5rem 1rem;
+  }
+  
+  .map-modal-footer {
+    padding: 0.5rem 1rem;
+  }
+}

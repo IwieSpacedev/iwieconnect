@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import '../styles/Contact.css';
 import contactService from '../firebase/contactService';
+import MapModal from '../components/MapModal';
+import AddressInput from '../components/AddressInput';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +13,7 @@ const Contact = () => {
     mensaje: ''
   });
   const [errors, setErrors] = useState({});
+  const [isMapModalOpen, setIsMapModalOpen] = useState(false);
   const [formStatus, setFormStatus] = useState({
     submitted: false,
     success: false,
@@ -32,6 +35,17 @@ const Contact = () => {
       validateAddress(value);
     }
   };
+  
+  // Manejar la selección de dirección desde el mapa
+  const handleAddressSelect = useCallback((selectedAddress) => {
+    setFormData(prevData => ({
+      ...prevData,
+      direccion: selectedAddress
+    }));
+    
+    // Validar la dirección seleccionada
+    validateAddress(selectedAddress);
+  }, []);
 
   const validateChileanPhone = (phone) => {
     // Validar formato de teléfono chileno (móvil o fijo)
@@ -181,19 +195,14 @@ const Contact = () => {
               />
               {errors.telefono && <span className="error-text">{errors.telefono}</span>}
             </div>
-            <div className="form-group">
-              <label htmlFor="direccion">Dirección *</label>
-              <input
-                type="text"
-                id="direccion"
-                name="direccion"
-                value={formData.direccion}
-                onChange={handleChange}
-                placeholder="Av. Ejemplo 123, Comuna, Ciudad"
-                required
-              />
-              {errors.direccion && <span className="error-text">{errors.direccion}</span>}
-            </div>
+            
+            <AddressInput 
+              value={formData.direccion}
+              onChange={handleChange}
+              error={errors.direccion}
+              onMapOpen={() => setIsMapModalOpen(true)}
+            />
+            
             <div className="form-group">
               <label htmlFor="mensaje">Mensaje *</label>
               <textarea
@@ -205,6 +214,7 @@ const Contact = () => {
                 required
               ></textarea>
             </div>
+            
             <button 
               type="submit" 
               className="submit-button"
@@ -233,6 +243,14 @@ const Contact = () => {
           </div>
         </div>
       </section>
+      
+      {/* Modal del mapa */}
+      <MapModal
+        isOpen={isMapModalOpen}
+        onClose={() => setIsMapModalOpen(false)}
+        onAddressSelect={handleAddressSelect}
+        initialAddress={formData.direccion}
+      />
     </main>
   );
 };
