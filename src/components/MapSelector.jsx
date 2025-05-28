@@ -24,7 +24,7 @@ function MapEvents({ onMapClick }) {
   return null;
 }
 
-const MapSelector = ({ onAddressSelect, initialAddress, isMobile = false }) => {
+const MapSelector = ({ onAddressSelect, initialAddress, initialCoordinates, isMobile = false, readOnly = false }) => {
   const [position, setPosition] = useState(defaultPosition);
   const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(false);
@@ -207,8 +207,28 @@ const MapSelector = ({ onAddressSelect, initialAddress, isMobile = false }) => {
     }
   };
   
-  // Efecto para buscar coordenadas a partir de una dirección inicial si existe
+  // Efecto para usar coordenadas iniciales si existen o buscar a partir de la dirección
   useEffect(() => {
+    // Si tenemos coordenadas iniciales, usarlas directamente
+    if (initialCoordinates && Array.isArray(initialCoordinates) && initialCoordinates.length === 2) {
+      const [lat, lng] = initialCoordinates;
+      setPosition([lat, lng]);
+      
+      // Si estamos en modo solo lectura, no necesitamos obtener la dirección
+      if (!readOnly) {
+        getAddressFromCoordinates(lat, lng);
+      } else if (initialAddress) {
+        setAddress(initialAddress);
+      }
+      
+      // Centrar el mapa en la posición
+      if (mapRef.current) {
+        mapRef.current.setView([lat, lng], 16);
+      }
+      return;
+    }
+    
+    // Si no hay coordenadas pero sí dirección inicial, buscar coordenadas
     if (initialAddress && initialAddress.length > 5 && !address) {
       const searchAddress = async () => {
         try {
@@ -250,8 +270,8 @@ const MapSelector = ({ onAddressSelect, initialAddress, isMobile = false }) => {
   
   return (
     <div className="map-selector">
-      <h3>Selecciona tu ubicación en el mapa</h3>
-      <p className="map-instruction">Haz clic en el mapa para seleccionar tu dirección exacta</p>
+      <h3>{readOnly ? 'Ubicación seleccionada' : 'Selecciona tu ubicación en el mapa'}</h3>
+      {!readOnly && <p className="map-instruction">Haz clic en el mapa para seleccionar tu dirección exacta</p>}
       
       <div className={`map-container-wrapper ${isMobile ? 'mobile' : ''}`}>
         <MapContainer 
@@ -265,16 +285,18 @@ const MapSelector = ({ onAddressSelect, initialAddress, isMobile = false }) => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           <Marker position={position} />
-          <MapEvents onMapClick={handleMapClick} />
+          {!readOnly && <MapEvents onMapClick={handleMapClick} />}
         </MapContainer>
       </div>
       
       {loading && <p className="loading-text">Cargando dirección...</p>}
       
-      <div className="map-instructions">
-        <small className="help-text">* Haz clic en el mapa para seleccionar tu ubicación exacta</small>
-        <small className="help-text">* La dirección se completará automáticamente en el formulario</small>
-      </div>
+      {!readOnly && (
+        <div className="map-instructions">
+          <small className="help-text">* Haz clic en el mapa para seleccionar tu ubicación exacta</small>
+          <small className="help-text">* La dirección se completará automáticamente en el formulario</small>
+        </div>
+      )}
       
       {address && (
         <div className="selected-address">

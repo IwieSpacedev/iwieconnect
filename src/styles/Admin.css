@@ -186,10 +186,45 @@
 }
 
 .message-content {
+  max-height: 100px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.address-cell {
+  max-width: 250px;
+}
+
+.address-with-map {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.address-text {
+  flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 100%;
+}
+
+.map-view-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 50%;
+  color: var(--primary-color);
+  transition: all 0.2s ease;
+}
+
+.map-view-button:hover {
+  background-color: rgba(var(--primary-rgb), 0.1);
+  color: var(--primary-hover);
 }
 
 .message-content:hover {

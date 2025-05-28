@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import contactService from '../firebase/contactService';
 import authService from '../firebase/authService';
 import '../styles/Admin.css';
+import MapModal from '../components/MapModal';
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState('users');
@@ -20,6 +21,8 @@ const Admin = () => {
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState('');
   const [editingUser, setEditingUser] = useState(null);
+  const [isMapModalOpen, setIsMapModalOpen] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState(null);
   const { currentUser, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
 
@@ -265,6 +268,47 @@ const Admin = () => {
     setFormError('');
     setFormSuccess('');
   };
+  
+  // Función para extraer coordenadas de una dirección
+  const extractCoordinates = (addressString) => {
+    if (!addressString || !addressString.includes('(')) {
+      return null;
+    }
+    
+    try {
+      // Intentar extraer las coordenadas del formato "dirección (lat, lng)"
+      const coordsMatch = addressString.match(/\(([-+]?\d+\.\d+),\s*([-+]?\d+\.\d+)\)/);
+      
+      if (coordsMatch && coordsMatch.length === 3) {
+        const lat = parseFloat(coordsMatch[1]);
+        const lng = parseFloat(coordsMatch[2]);
+        
+        if (!isNaN(lat) && !isNaN(lng)) {
+          return [lat, lng];
+        }
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('Error al extraer coordenadas:', error);
+      return null;
+    }
+  };
+  
+  // Función para manejar la visualización del mapa
+  const handleViewMap = (address) => {
+    const coordinates = extractCoordinates(address);
+    
+    if (coordinates) {
+      setSelectedLocation({
+        address: address.split('(')[0].trim(),
+        coordinates: coordinates
+      });
+      setIsMapModalOpen(true);
+    } else {
+      alert('No se pudieron determinar las coordenadas para esta dirección.');
+    }
+  };
 
   if (loading) {
     return (
@@ -323,6 +367,7 @@ const Admin = () => {
                       <th>Nombre</th>
                       <th>Email</th>
                       <th>Teléfono</th>
+                      <th>Dirección</th>
                       <th>Mensaje</th>
                       <th>Fecha</th>
                     </tr>
@@ -333,6 +378,27 @@ const Admin = () => {
                         <td>{contact.nombre}</td>
                         <td>{contact.email}</td>
                         <td>{contact.telefono || 'No proporcionado'}</td>
+                        <td className="address-cell">
+                          {contact.direccion ? (
+                            <div className="address-with-map">
+                              <div className="address-text">{contact.direccion.split('(')[0]}</div>
+                              {contact.direccion.includes('(') && (
+                                <button 
+                                  className="map-view-button" 
+                                  onClick={() => handleViewMap(contact.direccion)}
+                                  title="Ver ubicación en el mapa"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+                                    <path fill="none" d="M0 0h24v24H0z"/>
+                                    <path d="M12 20.9l4.95-4.95a7 7 0 1 0-9.9 0L12 20.9zm0 2.828l-6.364-6.364a9 9 0 1 1 12.728 0L12 23.728zM12 13a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 2a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" fill="currentColor"/>
+                                  </svg>
+                                </button>
+                              )}
+                            </div>
+                          ) : (
+                            'No proporcionada'
+                          )}
+                        </td>
                         <td className="message-cell">
                           <div className="message-content">{contact.mensaje}</div>
                         </td>
@@ -493,6 +559,18 @@ const Admin = () => {
           </div>
         )}
       </section>
+      
+      {/* Modal del mapa para ver ubicación */}
+      {selectedLocation && (
+        <MapModal
+          isOpen={isMapModalOpen}
+          onClose={() => setIsMapModalOpen(false)}
+          onAddressSelect={() => {}} // No necesitamos seleccionar dirección, solo ver
+          initialAddress={selectedLocation.address}
+          initialCoordinates={selectedLocation.coordinates}
+          readOnly={true}
+        />
+      )}
     </main>
   );
 };

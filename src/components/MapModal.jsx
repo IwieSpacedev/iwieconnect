@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
-import '../styles/MapModal.css';
+import React from 'react';
 import MapSelector from './MapSelector';
+import '../styles/MapModal.css';
 
-const MapModal = ({ isOpen, onClose, onAddressSelect, initialAddress }) => {
+const MapModal = ({ isOpen, onClose, onAddressSelect, initialAddress, initialCoordinates, readOnly = false }) => {
   // Evitar scroll en el body cuando el modal está abierto
   useEffect(() => {
     if (isOpen) {
@@ -23,21 +24,31 @@ const MapModal = ({ isOpen, onClose, onAddressSelect, initialAddress }) => {
       <div className="map-modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="map-modal-close" onClick={onClose}>×</button>
         <div className="map-modal-header">
-          <h3>Selecciona tu ubicación exacta</h3>
+          <h3>{readOnly ? 'Ver ubicación' : 'Seleccionar ubicación exacta'}</h3>
         </div>
         <div className="map-modal-body">
           <MapSelector 
             onAddressSelect={(address) => {
-              onAddressSelect(address);
-              onClose();
+              if (!readOnly) {
+                onAddressSelect(address);
+                onClose();
+              }
             }}
             initialAddress={initialAddress}
+            initialCoordinates={initialCoordinates}
             isMobile={true}
+            readOnly={readOnly}
           />
         </div>
-        <div className="map-modal-footer">
-          <button className="map-modal-button" onClick={onClose}>Cerrar</button>
-        </div>
+        {readOnly ? (
+          <div className="map-modal-footer">
+            <button className="map-modal-button" onClick={onClose}>Cerrar</button>
+          </div>
+        ) : (
+          <div className="map-modal-footer">
+            <button className="map-modal-button" onClick={onClose}>Cerrar</button>
+          </div>
+        )}
       </div>
     </div>
   );
