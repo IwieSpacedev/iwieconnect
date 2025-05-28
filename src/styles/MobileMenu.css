@@ -1,0 +1,155 @@
+/* Estilos para el overlay del menú móvil */
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* Estilos para el menú móvil */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 80%;
+  max-width: 320px;
+  height: 100%;
+  background-color: var(--white);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  transition: right 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-menu.active {
+  right: 0;
+}
+
+/* Cabecera del menú móvil */
+.mobile-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.mobile-menu-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--dark-color);
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--dark-color);
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.close-button:hover {
+  background-color: var(--light-gray);
+}
+
+/* Contenido del menú móvil */
+.mobile-menu-content {
+  padding: 1rem;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Enlaces de navegación */
+.mobile-nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+}
+
+.mobile-nav-item {
+  margin-bottom: 0.5rem;
+}
+
+.mobile-nav-link {
+  display: block;
+  padding: 1rem;
+  color: var(--dark-color);
+  text-decoration: none;
+  border-radius: var(--border-radius-md);
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+}
+
+.mobile-nav-link:hover {
+  background-color: var(--light-gray);
+  color: var(--primary-color);
+}
+
+/* Botones de navegación */
+.mobile-nav-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mobile-nav-button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  font-weight: 500;
+  transition: all var(--transition-normal);
+  text-align: center;
+  width: 100%;
+}
+
+.mobile-nav-button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.mobile-nav-button.logout {
+  background-color: transparent;
+  color: var(--dark-color);
+  border: 1px solid var(--light-gray);
+}
+
+.mobile-nav-button.logout:hover {
+  background-color: var(--light-gray);
+  color: var(--dark-color);
+}
+
+.mobile-nav-button.login {
+  background-color: var(--primary-color);
+}
+
+/* Prevenir el scroll del body cuando el menú está abierto */
+body.menu-open {
+  overflow: hidden;
+}

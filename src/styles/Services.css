@@ -1,0 +1,243 @@
+/* Estilos para la página de servicios */
+.services-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.services-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.services-header h1 {
+  font-size: 2.5rem;
+  color: var(--dark-color);
+  margin-bottom: 1rem;
+}
+
+.services-header p {
+  font-size: 1.2rem;
+  color: var(--gray);
+}
+
+.services-note {
+  background-color: var(--primary-light);
+  padding: 1rem;
+  border-radius: var(--border-radius-md);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.services-note p {
+  margin: 0;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+.plans-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.plan-card {
+  background-color: var(--white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.plan-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.plan-header {
+  padding: 2rem;
+  background-color: var(--primary-light);
+  text-align: center;
+}
+
+.plan-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--dark-color);
+}
+
+.plan-price {
+  margin: 1.5rem 0;
+}
+
+.price {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.period {
+  font-size: 1rem;
+  color: var(--gray);
+}
+
+.installation-cost {
+  font-size: 0.9rem;
+  color: var(--dark-secondary);
+  margin: 0;
+}
+
+.plan-speeds {
+  padding: 1.5rem 2rem;
+  background-color: var(--primary-light);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.speed-box {
+  text-align: center;
+  min-width: 100px;
+}
+
+.speed-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.speed-value span {
+  font-size: 1rem;
+  font-weight: 500;
+  vertical-align: text-top;
+}
+
+.speed-label {
+  font-size: 0.9rem;
+  color: var(--dark-secondary);
+  font-weight: 500;
+}
+
+.data-limit {
+  width: 100%;
+  text-align: center;
+  margin-top: 0.5rem;
+  font-weight: 600;
+  color: var(--success-color);
+  background-color: rgba(16, 185, 129, 0.1);
+  padding: 0.5rem;
+  border-radius: var(--border-radius-sm);
+}
+
+.plan-features {
+  padding: 2rem;
+  flex-grow: 1;
+}
+
+.plan-features ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.plan-features li {
+  padding: 0.5rem 0;
+  display: flex;
+  align-items: flex-start;
+  color: var(--dark-secondary);
+}
+
+.check-icon {
+  color: var(--success-color);
+  margin-right: 0.5rem;
+  font-weight: bold;
+}
+
+.plan-button {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  padding: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  font-size: 1rem;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+}
+
+.plan-button:hover {
+  background-color: var(--primary-hover);
+}
+
+.services-cta {
+  text-align: center;
+  background-color: var(--primary-light);
+  padding: 3rem 2rem;
+  border-radius: var(--border-radius-lg);
+  margin-top: 2rem;
+}
+
+.services-cta h2 {
+  font-size: 2rem;
+  color: var(--dark-color);
+  margin-bottom: 1rem;
+}
+
+.services-cta p {
+  font-size: 1.1rem;
+  color: var(--dark-secondary);
+  margin-bottom: 2rem;
+}
+
+.contact-button {
+  background-color: var(--primary-color);
+  color: var(--white);
+  display: inline-block;
+  text-decoration: none;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.contact-button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .services-header h1 {
+    font-size: 2rem;
+  }
+  
+  .plans-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .plan-card {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .services-cta {
+    padding: 2rem 1rem;
+  }
+  
+  .services-cta h2 {
+    font-size: 1.5rem;
+  }
+}
