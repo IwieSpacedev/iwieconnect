@@ -118,12 +118,12 @@
 
 .data-table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  font-size: 0.95rem;
-  border-radius: var(--border-radius-md);
+  border-collapse: collapse;
+  background-color: var(--color-white);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--border-radius-lg);
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  table-layout: fixed;
 }
 
 .user-info-text {
@@ -171,6 +171,7 @@
   border-bottom: 1px solid var(--light-gray);
   vertical-align: middle;
   line-height: 1.6;
+  overflow-wrap: break-word; /* Añadido para evitar desbordamiento de texto */
 }
 
 .data-table tr:hover {
@@ -182,14 +183,33 @@
 }
 
 .message-cell {
-  max-width: 300px;
+  max-width: 400px;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  vertical-align: middle;
 }
 
 .message-content {
-  max-height: 100px;
-  overflow-y: auto;
-  white-space: pre-wrap;
-  word-break: break-word;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
+}
+
+.view-more-button {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.85rem;
+  align-self: flex-start;
+}
+
+.view-more-button:hover {
+  color: var(--primary-dark);
 }
 
 .address-cell {
@@ -521,10 +541,19 @@
 }
 
 .actions-cell {
-  display: flex;
-  gap: var(--spacing-md);
-  justify-content: flex-end;
+  text-align: center;
+  vertical-align: middle; /* Alinea verticalmente el contenido de la celda */
 }
+
+/* Anchos de las columnas de la tabla de contactos */
+.col-nombre { width: 15%; }
+.col-email { width: 18%; }
+.col-telefono { width: 12%; }
+.col-direccion { width: 15%; }
+.col-plan { width: 10%; }
+.col-mensaje { width: 20%; }
+.col-fecha { width: 15%; }
+.col-acciones { width: 5%; }
 
 .edit-button, .delete-button {
   padding: 0.5rem 1rem;
@@ -554,4 +583,27 @@
 .delete-button:hover {
   background-color: var(--error-color);
   color: var(--white);
+}
+
+/* Estilos para botones con solo ícono */
+.icon-button {
+  background-color: transparent;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.icon-button.delete-button:hover {
+  background-color: rgba(var(--error-rgb), 0.1);
+}
+
+.icon-button.delete-button svg {
+  color: var(--error-color);
+}
+
+.icon-button.delete-button:hover svg {
+  color: var(--error-color);
 }

@@ -11,8 +11,8 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
 });
 
-// Coordenadas iniciales centradas en Santiago, Chile
-const defaultPosition = [-33.4489, -70.6693];
+// Coordenadas iniciales centradas en Chillán, Chile
+const defaultPosition = [-36.6067, -72.1034];
 
 // Componente para manejar eventos del mapa
 function MapEvents({ onMapClick }) {

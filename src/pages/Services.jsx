@@ -89,10 +89,10 @@ const Services = () => {
         {plans.map((plan) => (
           <div key={plan.id} className="plan-card">
             <div className="plan-header">
-              <h2>{plan.name}</h2>
+              <h2>{plan.name}{plan.nodes > 1 ? ` (${plan.nodes}\u00A0hogares)` : ''}</h2>
               <div className="plan-price">
                 <span className="price">${plan.price}</span>
-                <span className="period">/ mes</span>
+                <span className="period">/ mes{plan.nodes > 1 ? ' c/u' : ''}</span>
               </div>
               <p className="installation-cost">
                 + ${plan.installationCost} costo de instalación

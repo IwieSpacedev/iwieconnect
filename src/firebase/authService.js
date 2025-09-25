@@ -18,7 +18,8 @@ import {
   doc, 
   updateDoc, 
   deleteDoc, 
-  serverTimestamp 
+  serverTimestamp, 
+  setDoc
 } from 'firebase/firestore';
 
 /**
@@ -81,45 +82,48 @@ const authService = {
    * @param {string} role - Rol del usuario ('admin' o 'user')
    * @returns {Promise<Object>} - Datos del usuario creado
    */
-  async createUser(email, password, displayName, role = 'user') {
+  async createUser(email, password, displayName, role = 'user', plan = '') {
     try {
       console.log(`Creando usuario con email: ${email}, rol: ${role}`);
       
-      // Usar la API de Firebase Admin (simulada en cliente)
-      // En lugar de crear el usuario directamente, usaremos un enfoque diferente
-      // que no afecte la sesión actual del administrador
+      // 1. Crear el usuario en Firebase Authentication
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
       
-      // Generar un UID único para el nuevo usuario
-      const uid = 'user_' + Math.random().toString(36).substr(2, 9);
+      // 2. Actualizar el perfil del usuario en Firebase Auth (ej. nombre)
+      if (displayName) {
+        await updateProfile(user, { displayName });
+      }
       
-      // Validar que el rol sea válido
+      // 3. Guardar información adicional en Firestore
       const validRole = ['admin', 'user'].includes(role) ? role : 'user';
-      
-      // Datos a guardar en Firestore
       const userData = {
-        uid: uid,
-        email: email,
+        uid: user.uid,
+        email: user.email,
         displayName: displayName || '',
         role: validRole,
+        plan: plan, // Guardar el plan seleccionado
         createdAt: serverTimestamp(),
-        password: password // Nota: En producción NUNCA guardaríamos la contraseña en texto plano
       };
       
-      console.log('Guardando datos en Firestore:', userData);
+      console.log('Guardando datos adicionales en Firestore:', userData);
       
-      // Guardar información en Firestore
-      const docRef = await addDoc(collection(db, 'users'), userData);
-      console.log('Documento creado en Firestore con ID:', docRef.id);
+      // Usamos el UID de Auth como ID del documento en Firestore para mantener la consistencia
+      const userDocRef = doc(db, 'users', user.uid);
+      await setDoc(userDocRef, userData);
+      
+      console.log('Documento creado en Firestore con UID:', user.uid);
       
       return {
-        uid: uid,
-        email: email,
-        displayName: displayName || '',
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
         role: validRole,
-        id: docRef.id
       };
+
     } catch (error) {
       console.error('Error al crear usuario:', error);
+      // Propagar el error para que el componente que llama pueda manejarlo
       throw error;
     }
   },

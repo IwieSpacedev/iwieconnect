@@ -21,7 +21,8 @@ const Footer = () => {
         <div className="footer-contact">
           <h3>Contacto</h3>
           <p>Email: info@iwieconnect.cl</p>
-          <p>Teléfono: +56 9 1234 5678</p>
+          <p>Teléfono: +56 9 5810 8312</p>
+          <p>Dirección: Estero Lluanco 3311, Chillán</p>
         </div>
       </div>
       <div className="footer-bottom">

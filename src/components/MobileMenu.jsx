@@ -28,8 +28,8 @@ const MobileMenu = ({ isOpen, toggleMenu, isLoggedIn, handleLoginClick, handleDa
               </Link>
             </li>
             <li className="mobile-nav-item">
-              <Link to="/servicios" className="mobile-nav-link" onClick={toggleMenu}>
-                Servicios
+              <Link to="/planes" className="mobile-nav-link" onClick={toggleMenu}>
+                Planes
               </Link>
             </li>
             <li className="mobile-nav-item">

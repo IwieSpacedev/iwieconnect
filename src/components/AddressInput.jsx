@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/Contact.css';
 
-const AddressInput = ({ value, onChange, error, onMapOpen }) => {
+const AddressInput = ({ value, error, onMapOpen }) => {
   return (
     <div className="form-group">
       <label htmlFor="direccion">Dirección *</label>
@@ -11,9 +11,10 @@ const AddressInput = ({ value, onChange, error, onMapOpen }) => {
           id="direccion"
           name="direccion"
           value={value}
-          onChange={onChange}
-          placeholder="Av. Ejemplo 123, Comuna, Ciudad"
+          onClick={onMapOpen} // Abre el mapa al hacer clic
+          placeholder="Selecciona tu dirección en el mapa"
           required
+          readOnly // Evita la edición manual
         />
         <button 
           type="button" 

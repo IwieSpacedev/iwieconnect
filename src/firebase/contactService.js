@@ -1,5 +1,5 @@
 import { db } from './config';
-import { collection, addDoc, serverTimestamp, getDocs, query, orderBy } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, getDocs, query, orderBy, doc, deleteDoc } from 'firebase/firestore';
 
 /**
  * Servicio para manejar las operaciones relacionadas con los contactos en Firestore
@@ -48,6 +48,21 @@ const contactService = {
       }));
     } catch (error) {
       console.error('Error al obtener los contactos:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Elimina un contacto de Firestore
+   * @param {string} contactId - ID del documento del contacto a eliminar
+   * @returns {Promise<void>}
+   */
+  async deleteContact(contactId) {
+    try {
+      const contactRef = doc(db, 'contacts', contactId);
+      await deleteDoc(contactRef);
+    } catch (error) {
+      console.error('Error al eliminar el contacto:', error);
       throw error;
     }
   }

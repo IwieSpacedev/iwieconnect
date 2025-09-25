@@ -38,7 +38,7 @@ function App() {
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/contacto" element={<Contact />} />
-                  <Route path="/servicios" element={<Services />} />
+                  <Route path="/planes" element={<Services />} />
                 </Routes>
                 <Footer />
                 <WhatsAppButton />

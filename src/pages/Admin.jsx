@@ -5,6 +5,7 @@ import contactService from '../firebase/contactService';
 import authService from '../firebase/authService';
 import '../styles/Admin.css';
 import MapModal from '../components/MapModal';
+import MessageModal from '../components/MessageModal';
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState('users');
@@ -23,6 +24,8 @@ const Admin = () => {
   const [editingUser, setEditingUser] = useState(null);
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState(null);
+  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+  const [selectedMessage, setSelectedMessage] = useState('');
   const { currentUser, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
 
@@ -262,6 +265,21 @@ const Admin = () => {
     }
   };
   
+  const handleDeleteContact = async (contactId) => {
+    if (!confirm('¿Estás seguro de eliminar esta solicitud de contacto?')) {
+      return;
+    }
+
+    try {
+      await contactService.deleteContact(contactId);
+      setContacts(contacts.filter(c => c.id !== contactId));
+      // Opcional: mostrar un mensaje de éxito
+    } catch (error) {
+      console.error('Error al eliminar contacto:', error);
+      setError(`Error al eliminar solicitud: ${error.message}`);
+    }
+  };
+
   const handleCancelEdit = () => {
     setEditingUser(null);
     setUserFormData({ email: '', password: '', displayName: '', role: 'user' });
@@ -296,6 +314,23 @@ const Admin = () => {
   };
   
   // Función para manejar la visualización del mapa
+  const handleOpenMessageModal = (message) => {
+    setSelectedMessage(message);
+    setIsMessageModalOpen(true);
+  };
+
+  const handleCloseMessageModal = () => {
+    setIsMessageModalOpen(false);
+    setSelectedMessage('');
+  };
+
+  const truncateMessage = (message, maxLength = 30) => {
+    if (message.length <= maxLength) {
+      return message;
+    }
+    return message.substring(0, maxLength) + '...';
+  };
+
   const handleViewMap = (address) => {
     const coordinates = extractCoordinates(address);
     
@@ -364,12 +399,14 @@ const Admin = () => {
                 <table className="data-table">
                   <thead>
                     <tr>
-                      <th>Nombre</th>
-                      <th>Email</th>
-                      <th>Teléfono</th>
-                      <th>Dirección</th>
-                      <th>Mensaje</th>
-                      <th>Fecha</th>
+                      <th className="col-nombre">Nombre</th>
+                      <th className="col-email">Email</th>
+                      <th className="col-telefono">Teléfono</th>
+                      <th className="col-direccion">Dirección</th>
+                      <th className="col-plan">Plan</th>
+                      <th className="col-mensaje">Mensaje</th>
+                      <th className="col-fecha">Fecha</th>
+                      <th className="col-acciones">Acciones</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -399,10 +436,30 @@ const Admin = () => {
                             'No proporcionada'
                           )}
                         </td>
+                        <td>{contact.plan || 'No especificado'}</td>
                         <td className="message-cell">
-                          <div className="message-content">{contact.mensaje}</div>
+                          <div className="message-content">
+                            {truncateMessage(contact.mensaje)}
+                            {contact.mensaje.length > 30 && (
+                              <button 
+                                className="view-more-button" 
+                                onClick={() => handleOpenMessageModal(contact.mensaje)}
+                              >
+                                Ver más
+                              </button>
+                            )}
+                          </div>
                         </td>
                         <td>{contact.createdAt}</td>
+                        <td className="actions-cell">
+                          <button 
+                            className="delete-button icon-button" 
+                            onClick={() => handleDeleteContact(contact.id)}
+                            title="Eliminar solicitud"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -571,6 +628,12 @@ const Admin = () => {
           readOnly={true}
         />
       )}
+
+      <MessageModal 
+        isOpen={isMessageModalOpen} 
+        onClose={handleCloseMessageModal} 
+        message={selectedMessage} 
+      />
     </main>
   );
 };

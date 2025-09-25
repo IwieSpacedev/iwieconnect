@@ -10,7 +10,8 @@ const Contact = () => {
     email: '',
     telefono: '',
     direccion: '',
-    mensaje: ''
+    mensaje: '',
+    plan: '' // Nuevo estado para el plan seleccionado
   });
   const [errors, setErrors] = useState({});
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
@@ -31,8 +32,6 @@ const Contact = () => {
     // Validar campos cuando cambian
     if (name === 'telefono') {
       validateChileanPhone(value);
-    } else if (name === 'direccion') {
-      validateAddress(value);
     }
   };
   
@@ -198,11 +197,26 @@ const Contact = () => {
             
             <AddressInput 
               value={formData.direccion}
-              onChange={handleChange}
               error={errors.direccion}
               onMapOpen={() => setIsMapModalOpen(true)}
             />
             
+            <div className="form-group">
+              <label htmlFor="plan">Plan de Interés</label>
+              <select
+                id="plan"
+                name="plan"
+                value={formData.plan}
+                onChange={handleChange}
+              >
+                <option value="">No especificar</option>
+                <option value="Individual">Individual</option>
+                <option value="Pack 2 nodos">Pack 2 nodos</option>
+                <option value="Pack 3 nodos">Pack 3 nodos</option>
+                <option value="Pack 4 nodos">Pack 4 nodos</option>
+              </select>
+            </div>
+
             <div className="form-group">
               <label htmlFor="mensaje">Mensaje *</label>
               <textarea
@@ -231,7 +245,7 @@ const Contact = () => {
         <div className="contact-details">
           <div className="contact-item">
             <h3>Dirección</h3>
-            <p>Av. Providencia 1234, Santiago, Chile</p>
+            <p>Estero Lluanco 3311, Chillán</p>
           </div>
           <div className="contact-item">
             <h3>Correo electrónico</h3>
@@ -239,7 +253,7 @@ const Contact = () => {
           </div>
           <div className="contact-item">
             <h3>Teléfono</h3>
-            <p>+56 9 1234 5678</p>
+            <p>+56958108312</p>
           </div>
         </div>
       </section>

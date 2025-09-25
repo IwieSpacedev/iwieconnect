@@ -27,7 +27,7 @@ Este proyecto es un sitio web para un servicio de Internet Satelital / WiFi Sate
 ## Estructura del proyecto
 
 - `/src/components`: Componentes reutilizables (Navbar, Footer, WhatsAppButton)
-- `/src/pages`: Páginas principales (Home, Contact)
+- `/src/pages`: Páginas principales (Home, Contact, Planes)
 - `/src/styles`: Archivos CSS para componentes y páginas
 - `/src/assets`: Imágenes y otros recursos
 

@@ -12,6 +12,15 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [selectedPlan, setSelectedPlan] = useState('');
+
+  // Datos de los planes (extraídos de Services.jsx)
+  const plans = [
+    { id: 1, name: "Individual" },
+    { id: 2, name: "Pack 2 nodos" },
+    { id: 3, name: "Pack 3 nodos" },
+    { id: 4, name: "Pack 4 nodos" }
+  ];
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -37,7 +46,7 @@ const Register = () => {
 
     try {
       // Crear usuario regular
-      const result = await authService.createUser(email, password, displayName, 'user');
+      const result = await authService.createUser(email, password, displayName, 'user', selectedPlan);
       console.log('Usuario creado exitosamente:', result);
       
       // Guardar datos en localStorage para persistencia
@@ -58,6 +67,7 @@ const Register = () => {
       setPassword('');
       setConfirmPassword('');
       setDisplayName('');
+      setSelectedPlan('');
       
       // Redirigir al dashboard de usuario después de 2 segundos
       setTimeout(() => {
@@ -85,7 +95,7 @@ const Register = () => {
       <section className="login-card">
         <div className="login-header">
           <h1>Registro de Usuario</h1>
-          <p>Crea tu cuenta para acceder a nuestros servicios</p>
+          <p>Crea tu cuenta para acceder a nuestros planes</p>
         </div>
         
         {error && (
@@ -139,6 +149,21 @@ const Register = () => {
               />
             </div>
             
+            <div className="form-group">
+              <label htmlFor="plan">Selecciona un Plan *</label>
+              <select
+                id="plan"
+                value={selectedPlan}
+                onChange={(e) => setSelectedPlan(e.target.value)}
+                required
+              >
+                <option value="" disabled>Elige un plan</option>
+                {plans.map(plan => (
+                  <option key={plan.id} value={plan.name}>{plan.name}</option>
+                ))}
+              </select>
+            </div>
+
             <div className="form-group">
               <label htmlFor="confirmPassword">Confirmar contraseña</label>
               <input
